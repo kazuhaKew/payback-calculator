@@ -83,7 +83,13 @@ document.addEventListener('DOMContentLoaded', function() {
             resultMessage = `Payback period: ${wholeMonths} months and ${remainingDays} days`;
         }
         
-        // Display the result
+        // Display the result with animation
+        resultDiv.classList.add('updating');
         resultDiv.innerHTML = `<p>${resultMessage}</p>`;
+        
+        // Remove animation class after transition completes
+        setTimeout(() => {
+            resultDiv.classList.remove('updating');
+        }, 300);
     }
 });
