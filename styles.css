@@ -122,6 +122,11 @@ input {
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
+input:focus {
+    outline: 2px solid var(--button-bg);
+    border-color: transparent;
+}
+
 button {
     display: block;
     width: 100%;
@@ -145,11 +150,20 @@ button:hover {
     padding: 15px;
     border-radius: 4px;
     text-align: center;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .result p {
     font-size: 18px;
     color: var(--text-color);
     transition: color 0.3s ease;
+}
+
+/* Add a subtle animation when result updates */
+.result.updating {
+    transform: scale(1.02);
+}
+
+.error {
+    color: #e74c3c;
 }

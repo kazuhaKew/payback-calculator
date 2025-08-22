@@ -27,13 +27,34 @@ document.addEventListener('DOMContentLoaded', function() {
         document.documentElement.setAttribute('data-theme', 'dark');
     }
 
-    // Existing calculation functionality
+    // Enable live calculations
+    const liveInputs = document.querySelectorAll('[data-live-calc="true"]');
+    liveInputs.forEach(input => {
+        input.addEventListener('input', debounce(calculatePayback, 300));
+    });
+
+    // Keep the button for accessibility and fallback
     calculateBtn.addEventListener('click', calculatePayback);
+
+    // Debounce function to prevent excessive calculations during typing
+    function debounce(func, delay) {
+        let timeout;
+        return function() {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, arguments), delay);
+        };
+    }
 
     function calculatePayback() {
         // Get input values
         const purchasePrice = parseFloat(purchasePriceInput.value);
         const monthlyPayment = parseFloat(monthlyPaymentInput.value);
+        
+        // Check if both inputs have values before calculating
+        if (!purchasePriceInput.value || !monthlyPaymentInput.value) {
+            resultDiv.innerHTML = '<p>Enter both values to see the payback period</p>';
+            return;
+        }
         
         // Validate inputs
         if (isNaN(purchasePrice) || purchasePrice <= 0) {
