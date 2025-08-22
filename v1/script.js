@@ -68,19 +68,37 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Calculate payback period
-        const months = purchasePrice / monthlyPayment;
-        const wholeMonths = Math.floor(months);
-        const remainingDays = Math.round((months - wholeMonths) * 30); // Approximating a month as 30 days
+        const totalMonths = purchasePrice / monthlyPayment;
+        
+        // Calculate years, months, days and minutes
+        const years = Math.floor(totalMonths / 12);
+        const remainingMonths = Math.floor(totalMonths % 12);
+        
+        // Calculate days from the decimal part of months (assuming 30 days in a month)
+        const monthDecimal = totalMonths - Math.floor(totalMonths);
+        const days = Math.floor(monthDecimal * 30);
+        
+        // Calculate minutes from the remaining decimal part
+        const dayDecimal = monthDecimal * 30 - days;
+        const minutes = Math.round(dayDecimal * 24 * 60);
 
         // Format the result message
-        let resultMessage = '';
+        let resultMessage = 'Payback period: ';
         
-        if (months <= 1) {
-            resultMessage = `Payback period: ${months.toFixed(1)} months`;
-        } else if (remainingDays === 0) {
-            resultMessage = `Payback period: ${wholeMonths} months`;
-        } else {
-            resultMessage = `Payback period: ${wholeMonths} months and ${remainingDays} days`;
+        if (years > 0) {
+            resultMessage += `${years} year${years > 1 ? 's' : ''} `;
+        }
+        
+        if (remainingMonths > 0 || (years === 0 && remainingMonths === 0)) {
+            resultMessage += `${remainingMonths} month${remainingMonths !== 1 ? 's' : ''} `;
+        }
+        
+        if (days > 0) {
+            resultMessage += `${days} day${days !== 1 ? 's' : ''} `;
+        }
+        
+        if (minutes > 0) {
+            resultMessage += `${minutes} minute${minutes !== 1 ? 's' : ''}`;
         }
         
         // Display the result with animation
